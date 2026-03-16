@@ -1,4 +1,5 @@
 using FluentValidation;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using OutboxPatterns.Application.Users;
@@ -8,8 +9,18 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
+
 builder.Services.AddScoped<IUserService, CreateUser>();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateUserRequestValidator>();
+builder.Services.AddMassTransit(x=>
+{
+    x.UsingAzureServiceBus((context, cfg) =>
+    {
+        cfg.Host(builder.Configuration.GetConnectionString("AzureServiceBus"));
+        cfg.ConfigureEndpoints(context);
+    });
+    
+});
 builder.Services.AddDbContext<OutboxDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("OutboxConnection"));

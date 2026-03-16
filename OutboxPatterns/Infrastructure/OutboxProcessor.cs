@@ -1,9 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MassTransit;
+using Microsoft.EntityFrameworkCore;
+using OutboxPatterns.Domain;
+using System.Text.Json;
 
 namespace OutboxPatterns.Infrastructure;
 
 public class OutboxProcessor(IServiceScopeFactory serviceScopeFactory, 
-    ILogger<OutboxProcessor> logger) : BackgroundService
+    ILogger<OutboxProcessor> logger, IPublishEndpoint publishEndpoint) : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -31,6 +34,9 @@ public class OutboxProcessor(IServiceScopeFactory serviceScopeFactory,
                 logger.LogInformation(
                    "Outbox mesajı işlendi: {EventType} | Id: {Id} | Payload: {Payload}",
                    message.EventType, message.Id, message.Payload);
+                var userCreatedEvent = JsonSerializer.Deserialize<UserCreatedEvent>(message.Payload);
+
+                await publishEndpoint.Publish(userCreatedEvent, cancellationToken);
 
                 message.ProcessedOn = DateTime.UtcNow;
             }

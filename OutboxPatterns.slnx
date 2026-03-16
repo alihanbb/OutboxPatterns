@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="Notification/Notification.csproj" Id="f3d7a624-6e26-43dd-924f-7fea5c4fc44e" />
   <Project Path="OutboxPatterns/OutboxPatterns.csproj" />
 </Solution>
