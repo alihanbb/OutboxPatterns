@@ -1,4 +1,5 @@
 <Solution>
   <Project Path="Notification/Notification.csproj" Id="f3d7a624-6e26-43dd-924f-7fea5c4fc44e" />
   <Project Path="OutboxPatterns/OutboxPatterns.csproj" />
+  <Project Path="SharedEvent/SharedEvent.csproj" Id="b3b3d0ab-97fd-47e9-84f8-ddb92628c0bc" />
 </Solution>

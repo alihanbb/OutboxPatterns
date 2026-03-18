@@ -1,6 +1,7 @@
-﻿using MassTransit;
+using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+
 
 var builder = Host.CreateApplicationBuilder(args);
 
@@ -9,7 +10,7 @@ builder.Services.AddMassTransit(x =>
     x.AddConsumer<UserCreatedEventConsumer>();
     x.UsingAzureServiceBus((context, cfg) =>
     {
-        cfg.Host(builder.Configuration.GetConnectionString(Notification.Const.AzureServiceBusConnectionString));
+        cfg.Host(builder.Configuration.GetConnectionString("AzureServiceBus"));
         cfg.ConfigureEndpoints(context);
     });
 });

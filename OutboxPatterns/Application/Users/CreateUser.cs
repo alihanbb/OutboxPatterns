@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 using OutboxPatterns.Domain;
 using OutboxPatterns.Infrastructure;
 using System.Text.Json;
@@ -65,6 +65,7 @@ public class CreateUser(OutboxDbContext outboxDbContext, ILogger<CreateUser> log
             };
             await outboxDbContext.OutboxTables.AddAsync(outboxMessage, cancellationToken);
 
+            await outboxDbContext.SaveChangesAsync(cancellationToken);
             await transaction.CommitAsync(cancellationToken);
             logger.LogInformation("Create new users is Success");
 

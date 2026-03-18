@@ -3,6 +3,6 @@
 
 public class Const
 {
-    public static string AzureServiceBusConnectionString = "AzureServiceBus";
+    public static string AzureServiceBusConnectionString = "ConnectionStrings:AzureServiceBus";
     
 }

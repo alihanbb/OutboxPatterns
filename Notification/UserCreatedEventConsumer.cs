@@ -1,5 +1,6 @@
 using MassTransit;
 using Microsoft.Extensions.Logging;
+using SharedEvent;
 
 public class UserCreatedEventConsumer(ILogger<UserCreatedEventConsumer> logger)
     : IConsumer<UserCreatedEvent>

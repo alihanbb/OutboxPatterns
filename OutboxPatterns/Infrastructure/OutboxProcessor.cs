@@ -1,12 +1,12 @@
-﻿using MassTransit;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
-using OutboxPatterns.Domain;
+using SharedEvent;
 using System.Text.Json;
 
 namespace OutboxPatterns.Infrastructure;
 
 public class OutboxProcessor(IServiceScopeFactory serviceScopeFactory, 
-    ILogger<OutboxProcessor> logger, IPublishEndpoint publishEndpoint) : BackgroundService
+    ILogger<OutboxProcessor> logger) : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -20,6 +20,7 @@ public class OutboxProcessor(IServiceScopeFactory serviceScopeFactory,
     {
         using var scope = serviceScopeFactory.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<OutboxDbContext>();
+        var publishEndpoint = scope.ServiceProvider.GetRequiredService<IPublishEndpoint>();
         
         var pendingMessages = await dbContext.OutboxTables
           .Where(x => x.ProcessedOn == null)
